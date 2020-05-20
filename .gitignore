@@ -1,0 +1,13 @@
+# Compiled Output
+/dist
+/unpackage
+
+# Dependencies
+/node_modules
+
+# Misc
+/coverage
+
+# System Files
+.DS_Store
+.idea
