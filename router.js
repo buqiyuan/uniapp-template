@@ -1,4 +1,4 @@
-import MinRouter from '.utils/MinRouter'
+import MinRouter from './utils/MinRouter'
 
 // 配置路由
 const router = new MinRouter({

@@ -1,37 +1,41 @@
 const toString = Object.prototype.toString
 
-function isObject (value) {
+function isObject(value) {
 	return toString.call(value) === '[object Object]'
-} 
+}
 
 function isString(value) {
 	return toString.call(value) === '[object String]'
 }
 
-function isDefault (value) {
+function isDefault(value) {
 	return value === void 0
 }
 
-function openPage (args) {
-	let name, query = {}, queryStr = null, path, type, isName = false
-	
+function openPage(args) {
+	let name, query = {},
+		queryStr = null,
+		path, type, isName = false
+
 	switch (true) {
 		case isObject(args):
-		({name, query = {}} = args)
-		break
+			({
+				name,
+				query = {}
+			} = args)
+			break
 		case isString(args):
-		name = args
-		break
-		default: 
-		throw new Error('参数必须是对象或者字符串')
+			name = args
+			break
+		default:
+			throw new Error('参数必须是对象或者字符串')
 	}
-	
+
 	if (isObject(query)) {
 		queryStr = encodeURIComponent(JSON.stringify(query))
 	} else {
-		throw new Error('query数据必须是object')
+		throw new Error('query数据必须是Object')
 	}
-	
 	this.$minRouter.forEach(item => {
 		if (item.name === name) {
 			path = item.path
@@ -39,15 +43,15 @@ function openPage (args) {
 			isName = true
 		}
 	})
-	
+
 	if (!isName) {
 		throw new Error(`没有${name}页面`)
-	} 
-	
-	if (!['navigateTo', 'switchTab', 'relaunch', 'redirectTo'].includes(type)) {
-		throw new Error(`name:${name}里面的type必须是一下的值['navigateTo', 'switchTab', 'reLaunch', 'redirectTo']`)
 	}
-	
+
+	if (!['navigateTo', 'switchTab', 'reLaunch', 'redirectTo'].includes(type)) {
+		throw new Error(`name:${name}里面的type必须是以下的值['navigateTo', 'switchTab', 'reLaunch', 'redirectTo']`)
+	}
+
 	return new Promise((resolve, reject) => {
 		uni[type]({
 			url: `/${path}?query=${queryStr}`,
@@ -66,10 +70,10 @@ function parseURL() {
 	}
 }
 
-function install (Vue) {
+function install(Vue) {
 	Vue.mixin({
 		beforeCreate: function() {
-			if (!isDefault(this.$options.$minRouter)) {
+			if (!isDefault(this.$options.minRouter)) {
 				Vue._minRouter = this.$options.minRouter
 			}
 		}
@@ -93,7 +97,7 @@ function install (Vue) {
 
 function MinRouter(options) {
 	if (!(this instanceof MinRouter)) {
-		throw Error('MinRouter是一个构造函数，应该用`new`关键字调用')
+		throw Error("MinRouter是一个构造函数，应该用`new`关键字调用")
 	}
 	isDefault(options) && (options = {})
 	this.options = options
